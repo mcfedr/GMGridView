@@ -41,7 +41,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
 #pragma mark - Private interface
 //////////////////////////////////////////////////////////////
 
-@interface GMGridView () <UIGestureRecognizerDelegate, UIScrollViewDelegate>
+@interface GMGridView () <UIGestureRecognizerDelegate, UIScrollViewDelegate, GMGridViewLayoutStrategyDelegate>
 {
     // Views
     UIScrollView *_scrollView;
@@ -438,6 +438,27 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
     }
     
     return valid;
+}
+
+//////////////////////////////////////////////////////////////
+#pragma mark GMGridViewLayoutStrategy delegate 
+//////////////////////////////////////////////////////////////
+
+- (CGSize)sizeForItems
+{
+    __gm_weak GMGridView *weakSelf = self; 
+    return [self.dataSource sizeForItemsInGMGridView:weakSelf];
+}
+
+- (CGSize)sizeForCellAtIndex:(NSInteger)index
+{
+    __gm_weak GMGridView *weakSelf = self;
+    if([weakSelf.dataSource respondsToSelector:@selector(GMGridView:sizeForCellAtIndex:)]) {
+        return [weakSelf.dataSource GMGridView:weakSelf sizeForCellAtIndex:index];
+    }
+    else {
+        return [self sizeForItems];
+    }
 }
 
 //////////////////////////////////////////////////////////////
@@ -1139,7 +1160,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
 
 - (void)recomputeSize
 {
-    [self.layoutStrategy setupItemSize:_itemSize andItemSpacing:self.itemSpacing withMinEdgeInsets:self.minEdgeInsets andCenteredGrid:self.centerGrid];
+    [self.layoutStrategy setupItemSizeDelegate:self andItemSpacing:self.itemSpacing withMinEdgeInsets:self.minEdgeInsets andCenteredGrid:self.centerGrid];
     [self.layoutStrategy rebaseWithItemCount:_numberTotalItems insideOfBounds:self.bounds];
     
     CGSize contentSize = [self.layoutStrategy contentSize];

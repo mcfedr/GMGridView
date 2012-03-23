@@ -105,13 +105,14 @@ typedef enum
 
 @required
 // Populating subview items 
-- (NSInteger)numberOfItemsInGMGridView:(GMGridView *)gridView;
 - (CGSize)sizeForItemsInGMGridView:(GMGridView *)gridView;
+- (NSInteger)numberOfItemsInGMGridView:(GMGridView *)gridView;
 - (GMGridViewCell *)GMGridView:(GMGridView *)gridView cellForItemAtIndex:(NSInteger)index;
 
 @optional
 // Required to enable editing mode
 - (void)GMGridView:(GMGridView *)gridView deleteItemAtIndex:(NSInteger)index;
+- (CGSize)GMGridView:(GMGridView *)gridView sizeForCellAtIndex:(NSInteger)index;
 
 @end
 

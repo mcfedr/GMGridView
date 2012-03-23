@@ -52,6 +52,21 @@ typedef enum {
 
 @end
 
+//////////////////////////////////////////////////////////////
+#pragma mark - The strategy delegate
+//////////////////////////////////////////////////////////////
+
+@protocol GMGridViewLayoutStrategyDelegate <NSObject>
+
+@required
+// Populating subview items 
+- (CGSize)sizeForItems;
+
+@optional
+- (CGSize)sizeForCellAtIndex:(NSInteger)index;
+
+@end
+
 
 //////////////////////////////////////////////////////////////
 #pragma mark - The strategy protocol
@@ -64,7 +79,7 @@ typedef enum {
 - (GMGridViewLayoutStrategyType)type;
 
 // Setup
-- (void)setupItemSize:(CGSize)itemSize andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered;
+- (void)setupItemSizeDelegate:(id<GMGridViewLayoutStrategyDelegate>)itemSizeDelegate andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered;
 
 // Recomputing
 - (void)rebaseWithItemCount:(NSInteger)count insideOfBounds:(CGRect)bounds;
@@ -94,6 +109,7 @@ typedef enum {
     NSInteger _itemSpacing;
     UIEdgeInsets _minEdgeInsets;
     BOOL _centeredGrid;
+    id<GMGridViewLayoutStrategyDelegate> _itemSizeDelegate;
     
     // All of these vars should be set in the rebase method of the child class
     NSInteger _itemCount;
@@ -108,14 +124,14 @@ typedef enum {
 @property (nonatomic, readonly) NSInteger itemSpacing;
 @property (nonatomic, readonly) UIEdgeInsets minEdgeInsets;
 @property (nonatomic, readonly) BOOL centeredGrid;
+@property (nonatomic, readonly) id<GMGridViewLayoutStrategyDelegate> itemSizeDelegate;
 
 @property (nonatomic, readonly) NSInteger itemCount;
 @property (nonatomic, readonly) UIEdgeInsets edgeInsets;
 @property (nonatomic, readonly) CGRect gridBounds;
 @property (nonatomic, readonly) CGSize contentSize;
 
-// Protocol methods implemented in base class
-- (void)setupItemSize:(CGSize)itemSize andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered;
+- (void)setupItemSizeDelegate:(id<GMGridViewLayoutStrategyDelegate>)itemSizeDelegate andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered;
 
 // Helpers
 - (void)setEdgeAndContentSizeFromAbsoluteContentSize:(CGSize)actualContentSize;

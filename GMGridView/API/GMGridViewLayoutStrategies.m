@@ -70,6 +70,7 @@
 
 @synthesize type          = _type;
 
+@synthesize itemSizeDelegate = _itemSizeDelegate;
 @synthesize itemSize      = _itemSize;
 @synthesize itemSpacing   = _itemSpacing;
 @synthesize minEdgeInsets = _minEdgeInsets;
@@ -80,10 +81,10 @@
 @synthesize gridBounds    = _gridBounds;
 @synthesize contentSize   = _contentSize;
 
-
-- (void)setupItemSize:(CGSize)itemSize andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered
+- (void)setupItemSizeDelegate:(id<GMGridViewLayoutStrategyDelegate>)itemSizeDelegate andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered
 {
-    _itemSize      = itemSize;
+    _itemSizeDelegate = itemSizeDelegate;
+    _itemSize      = [itemSizeDelegate sizeForItems];
     _itemSpacing   = spacing;
     _minEdgeInsets = edgeInsets;
     _centeredGrid  = centered;
