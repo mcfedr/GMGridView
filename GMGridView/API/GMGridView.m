@@ -78,7 +78,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
 }
 
 @property (nonatomic, readonly) BOOL itemsSubviewsCacheIsValid;
-@property (nonatomic, strong) NSArray *itemSubviewsCache;
+@property (strong, nonatomic) NSArray *itemSubviewsCache;
 @property (atomic) NSInteger firstPositionLoaded;
 @property (atomic) NSInteger lastPositionLoaded;
 
@@ -1445,7 +1445,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
     {        
         cell = [self newItemSubViewForPosition:index];
         
-        for (int i = _numberToTotalItems - 1; i >= index; i--)
+        for (int i = _numberTotalItems - 1; i >= index; i--)
         {
             UIView *oldView = [self cellForItemAtIndex:i];
             oldView.tag = oldView.tag + 1;
